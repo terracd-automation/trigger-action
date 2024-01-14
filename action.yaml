@@ -1,0 +1,49 @@
+# action.yaml
+name: 'TerraCD Trigger Github Action'
+description: 'A Github Action that triggers TerraCD deployment'
+inputs:
+  service-name:
+    description: 'Name of the service to deploy'
+    required: true
+  service-version:
+    description: 'A new version of the service to deploy'
+    required: true
+  deployment-repo:
+    description: 'TerraCD repository with service declaration'
+    required: true
+  autodeploy:
+    description: 'Whether to run deploy automatically or wait for manual action'
+    required: false
+  github-token:
+    description: 'Github token with access to deployment repo'
+    required: true
+outputs:
+  merge_request_link:
+    description: 'Link to Merge Request'
+    value: ${{ steps.get-square.outputs.merge_request_link }}
+  status:
+    description: 'Status of TerraCD deployment'
+    value: ${{ steps.get-square.outputs.status }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5.0.0
+      with:
+        python-version: '3.10'
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+          echo "SERVICE_NAME=${{ inputs.service-name }}" >> $GITHUB_ENV
+          echo "SERVICE_VERSION=${{ inputs.service-version }}" >> $GITHUB_ENV
+          echo "DEPLOYMENT_REPO=${{ inputs.deployment-repo }}" >> $GITHUB_ENV
+          echo "DEPLOYMENT_ACCESS_TOKEN=${{ inputs.github-token }}" >> $GITHUB_ENV
+          echo "GIT_HOST=GitHub" >> $GITHUB_ENV
+          echo "AUTODEPLOY=${{ inputs.autodeploy }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Run TerraCD client
+      id: terracd-client-run
+      run: python run_terracd_client.py
+      shell: bash
