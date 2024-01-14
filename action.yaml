@@ -20,10 +20,10 @@ inputs:
 outputs:
   merge_request_link:
     description: 'Link to Merge Request'
-    value: ${{ steps.get-square.outputs.merge_request_link }}
+    value: ${{ steps.terracd-client-run.outputs.merge_request_link }}
   status:
     description: 'Status of TerraCD deployment'
-    value: ${{ steps.get-square.outputs.status }}
+    value: ${{ steps.terracd-client-run.outputs.status }}
 runs:
   using: 'composite'
   steps:
