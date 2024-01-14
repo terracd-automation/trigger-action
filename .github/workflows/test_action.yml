@@ -18,4 +18,6 @@ jobs:
           deployment-repo: dummy
           github-token: dummy
       - name: Print outputs
-        run: echo "${{ steps.trigger.outputs.status }}\n${{ steps.trigger.outputs.merge_request_link }} "
+        run: |
+            echo "Status: ${{ steps.trigger.outputs.status }}"
+            echo "MR: ${{ steps.trigger.outputs.merge_request_link }}"

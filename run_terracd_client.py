@@ -3,7 +3,7 @@ import os
 service_name = os.environ.get("SERVICE_NAME")
 service_version = os.environ.get("SERVICE_VERSION")
 
-status = f"Deployment for service '{service_name}' is triggered with version {service_version}"
+status = f"TRIGGERED"
 mr_link="https://github.com/terracd-automation/trigger-action"
 
 def set_output(name, value):
